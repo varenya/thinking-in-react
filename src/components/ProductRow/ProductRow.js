@@ -1,7 +1,12 @@
+import "./productrow.css";
+
 function ProductRow(props) {
   return (
     <div>
-      <span>{props.product_name}</span> {props.product_price}
+      <span className={props.stocked ? "" : "is-not-stocked"}>
+        {props.product_name}
+      </span>{" "}
+      {props.product_price}
     </div>
   );
 }

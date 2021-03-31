@@ -19,6 +19,14 @@ function App() {
   function toggleChecked() {
     setChecked((prevValue) => !prevValue);
   }
+
+  /*   
+      isChecked stocked 
+        true     true  ->   hide not stocked products
+        true     false ->   show all 
+        false    true  -> do nothing
+        false    false -> do nothing
+  */
   return (
     <div className="app">
       <section className="search">
@@ -37,9 +45,20 @@ function App() {
           return (
             <Fragment>
               <h2>{category}</h2>
-              {currentProductList.map(({ name, price }) => (
-                <ProductRow product_name={name} product_price={price} />
-              ))}
+              {currentProductList
+                .filter(
+                  ({ name }) =>
+                    name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+                )
+                .map(({ name, price, stocked }) =>
+                  isChecked && !stocked ? null : (
+                    <ProductRow
+                      product_name={name}
+                      product_price={price}
+                      stocked={stocked}
+                    />
+                  )
+                )}
             </Fragment>
           );
         })}
