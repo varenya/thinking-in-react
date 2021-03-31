@@ -19,31 +19,43 @@ function App() {
   function toggleChecked() {
     setChecked((prevValue) => !prevValue);
   }
+
   return (
-    <div className="app">
-      <section className="search">
+    <div className="flex justify-center items-center w-screen h-screen bg-primary">
+      <div class="w-1/2 bg-white p-8 rounded-md shadow-xl">
         <SearchBar
           searchText={searchText}
           handleSearchText={handleSearchText}
         />
-      </section>
-      <section className="in_stock">
-        <Checkbox currentValue={isChecked} handleChange={toggleChecked} />
-      </section>
-      <section className="product-list">
-        <h1>Name Price</h1>
-        {Object.keys(productsByCategory).map((category) => {
-          let currentProductList = productsByCategory[category];
-          return (
-            <Fragment>
-              <h2>{category}</h2>
-              {currentProductList.map(({ name, price }) => (
-                <ProductRow product_name={name} product_price={price} />
-              ))}
-            </Fragment>
-          );
-        })}
-      </section>
+        <section className="flex items-center my-4 justify-center">
+          <Checkbox currentValue={isChecked} handleChange={toggleChecked} />
+        </section>
+        <table className="border-2 border-secondary p-4 rounded-md w-full">
+          <tr>
+            <th className="text-left">Name</th>
+            <th className="text-left">Price</th>
+          </tr>
+          {Object.keys(productsByCategory).map((category) => {
+            let currentProductList = productsByCategory[category];
+            return (
+              <Fragment>
+                <tr>
+                  <td
+                    className="text-bold italic"
+                    style={{ backgroundColor: "#ece8e8" }}
+                    colspan="2"
+                  >
+                    {category}
+                  </td>
+                </tr>
+                {currentProductList.map(({ name, price }) => (
+                  <ProductRow product_name={name} product_price={price} />
+                ))}
+              </Fragment>
+            );
+          })}
+        </table>
+      </div>
     </div>
   );
 }

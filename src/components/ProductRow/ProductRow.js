@@ -1,8 +1,9 @@
 function ProductRow(props) {
   return (
-    <div>
-      <span>{props.product_name}</span> {props.product_price}
-    </div>
+    <tr>
+      <td className="text-left px-2 py-2">{props.product_name}</td>
+      <td className="text-left px-2 py-2">{props.product_price}</td>
+    </tr>
   );
 }
 
