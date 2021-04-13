@@ -1,16 +1,32 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import "./App.css";
-import { products } from "./api";
 import { groupBy } from "./utility";
 import { SearchBar } from "./components/SearchBar";
 import { Checkbox } from "./components/Checkbox";
 import { ProductRow } from "./components/ProductRow";
 
-const productsByCategory = groupBy(products, "category");
+const PRODUCT_LIST_URL = `/products`;
 
 function App() {
   const [searchText, setSearchText] = useState("");
   const [isChecked, setChecked] = useState(false);
+  const [status, setStatus] = useState("INITIAL");
+  const [productList, setProductList] = useState([]);
+  const [searchProducts, setSearchProducts] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setStatus("LOADING");
+      const serverProductList = await fetch(`${PRODUCT_LIST_URL}`).then((res) =>
+        res.json()
+      );
+      setProductList(serverProductList);
+      setStatus("DONE");
+    }
+    fetchProducts();
+  }, []);
+
+  const productsByCategory = groupBy(productList, "category");
 
   function handleSearchText(event) {
     setSearchText(event.target.value);
@@ -27,6 +43,9 @@ function App() {
         false    true  -> do nothing
         false    false -> do nothing
   */
+  if (status === "INITIAL" || status === "LOADING") {
+    return <h1>Loading..</h1>;
+  }
   return (
     <div className="app">
       <section className="search">
@@ -45,20 +64,15 @@ function App() {
           return (
             <Fragment>
               <h2>{category}</h2>
-              {currentProductList
-                .filter(
-                  ({ name }) =>
-                    name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
+              {currentProductList.map(({ name, price, stocked }) =>
+                isChecked && !stocked ? null : (
+                  <ProductRow
+                    product_name={name}
+                    product_price={price}
+                    stocked={stocked}
+                  />
                 )
-                .map(({ name, price, stocked }) =>
-                  isChecked && !stocked ? null : (
-                    <ProductRow
-                      product_name={name}
-                      product_price={price}
-                      stocked={stocked}
-                    />
-                  )
-                )}
+              )}
             </Fragment>
           );
         })}
