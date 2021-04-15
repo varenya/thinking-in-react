@@ -12,17 +12,33 @@ function App() {
   const [isChecked, setChecked] = useState(false);
   const [status, setStatus] = useState("INITIAL");
   const [productList, setProductList] = useState([]);
-  const [searchProducts, setSearchProducts] = useState(true);
 
-  useEffect(() => {
-    async function fetchProducts() {
+  async function fetchProducts() {
+    try {
       setStatus("LOADING");
       const serverProductList = await fetch(`${PRODUCT_LIST_URL}`).then((res) =>
         res.json()
       );
       setProductList(serverProductList);
       setStatus("DONE");
+    } catch (e) {
+      setStatus("ERROR");
     }
+  }
+
+  async function searchProducts(searchText) {
+    setStatus("LOADING");
+    try {
+      const serverProductList = await fetch(
+        `${PRODUCT_LIST_URL}/${searchText}`
+      ).then((res) => res.json());
+      setProductList(serverProductList);
+      setStatus("DONE");
+    } catch (e) {
+      setStatus("ERROR");
+    }
+  }
+  useEffect(() => {
     fetchProducts();
   }, []);
 
@@ -34,6 +50,10 @@ function App() {
 
   function toggleChecked() {
     setChecked((prevValue) => !prevValue);
+  }
+
+  function handleAsyncSearch() {
+    searchProducts(searchText);
   }
 
   /*   
@@ -48,11 +68,12 @@ function App() {
   }
   return (
     <div className="app">
-      <section className="search">
+      <section className="search flex">
         <SearchBar
           searchText={searchText}
           handleSearchText={handleSearchText}
         />
+        <button onClick={handleAsyncSearch}>Search</button>
       </section>
       <section className="in_stock">
         <Checkbox currentValue={isChecked} handleChange={toggleChecked} />

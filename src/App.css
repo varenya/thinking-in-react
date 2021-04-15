@@ -6,6 +6,27 @@
 
 .search {
   margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search input {
+  flex: 0 0 60%;
+}
+
+.search button {
+  flex: 0 0 30%;
+  border: none;
+  background: papayawhip;
+  border-radius: 10px;
+  cursor: pointer;
+  color: red;
+  outline: none;
+}
+
+.search button:hover {
+  background: #ff6127;
+  color: white;
 }
 
 .in_stock {
