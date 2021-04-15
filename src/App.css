@@ -12,6 +12,10 @@
 
 .search input {
   flex: 0 0 60%;
+  border: 1px solid orangered;
+  border-radius: 10px;
+  outline: none;
+  padding: 15px;
 }
 
 .search button {
@@ -44,4 +48,26 @@
   border: 1px solid #e76f51;
   border-radius: 10px;
   padding: 20px;
+}
+
+.category {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.product-row {
+  margin: 5px 0;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.loader h1 {
+  margin-left: 10px;
+  color: orangered;
 }

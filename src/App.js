@@ -4,6 +4,7 @@ import { groupBy } from "./utility";
 import { SearchBar } from "./components/SearchBar";
 import { Checkbox } from "./components/Checkbox";
 import { ProductRow } from "./components/ProductRow";
+import { Loader } from "./components/Loader";
 
 const PRODUCT_LIST_URL = `/products`;
 
@@ -63,8 +64,14 @@ function App() {
         false    true  -> do nothing
         false    false -> do nothing
   */
+
   if (status === "INITIAL" || status === "LOADING") {
-    return <h1>Loading..</h1>;
+    return (
+      <div className="loader">
+        <Loader />
+        <h1>Loading...</h1>
+      </div>
+    );
   }
   return (
     <div className="app">
@@ -84,14 +91,16 @@ function App() {
           let currentProductList = productsByCategory[category];
           return (
             <Fragment>
-              <h2>{category}</h2>
+              <h3 className="category">{category}</h3>
               {currentProductList.map(({ name, price, stocked }) =>
                 isChecked && !stocked ? null : (
-                  <ProductRow
-                    product_name={name}
-                    product_price={price}
-                    stocked={stocked}
-                  />
+                  <div className="product-row">
+                    <ProductRow
+                      product_name={name}
+                      product_price={price}
+                      stocked={stocked}
+                    />
+                  </div>
                 )
               )}
             </Fragment>
